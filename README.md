@@ -1,5 +1,5 @@
 # Hướng dẫn mở kết nối đến MySql(Xampp) sử dụng IntelliJ IDEA Community Edition:
-File -> Project Structure -> Modules -> Tab Dependencies -> "+" -> Chọn mysql-connector-j-8.3.0.jar
+File -> Project Structure -> Modules -> Tab Dependencies -> "+" -> Chọn mysql-connector-j-8.3.0.jar -> Apply rồi OK
 ![image](https://github.com/NguyenLinh203/QuanLyNhanSu/assets/138262382/150fdbd9-c0f9-4cab-9673-5e5deac5c81a)
 (Cac file module + database đều nằm trong folder Project)
 Chạy thử DatabaseConnectionTest để kiểm tra kết nối
