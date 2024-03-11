@@ -2,8 +2,10 @@
 File -> Project Structure -> Modules -> Tab Dependencies -> "+" -> Chọn mysql-connector-j-8.3.0.jar -> Apply rồi OK
 ![image](https://github.com/NguyenLinh203/QuanLyNhanSu/assets/138262382/150fdbd9-c0f9-4cab-9673-5e5deac5c81a)
 (Cac file module + database đều nằm trong folder Project)
-.Chạy thử DatabaseConnectionTest để kiểm tra kết nối
-.*Nhớ import package ConnectionManager.ConnectionManager khi muốn mở connection đến database*
+
+Chạy thử DatabaseConnectionTest để kiểm tra kết nối
+
+*Nhớ import package ConnectionManager.ConnectionManager khi muốn mở connection đến database*
 
 # Cấu trúc dự án:
 Các view đều có folder riêng, ai làm phần nào thì làm trong folder đấy
