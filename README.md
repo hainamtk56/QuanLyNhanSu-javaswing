@@ -46,5 +46,6 @@ Linh: View Thông tin cá nhân: Hiển thị thông tin cá nhân, lương, th�
 # Lưu ý:
 - Tên bảng viết thường, ví dụ: nhanvien, luongthuong.
 - Tên cột của bảng, tên biến viết Camel case, ví dụ: idNhanVien, hoTen, soDienThoai
+
 Vẫn đang thiếu bảng dự án
 DEADLINE: 22/3/2024
