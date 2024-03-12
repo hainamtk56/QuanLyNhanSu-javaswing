@@ -1,27 +1,34 @@
 package QuanLyNhanVien.Controller;
 
 import ConnectionManager.ConnectionManager;
-
+import QuanLyNhanVien.Model.NhanVien;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
-public class EmployeeDAO {
-    private static final String INSERT_QUERY = "INSERT INTO student (Name, Age, Address, GPA) VALUES (?, ?, ?, ?)";
-    private static final String SELECT_ALL_QUERY = "SELECT * FROM student";
-    private static final String UPDATE_QUERY = "UPDATE student SET Name = ?, Age = ?, Address = ?, GPA = ? WHERE ID = ?";
-    private static final String DELETE_QUERY = "DELETE FROM student WHERE ID = ?";
+public class NhanVienDAO {
+    private static final String INSERT_QUERY = "INSERT INTO nhanvien (hoTen, ngaySinh, gioiTinh, tinhTrang, ngayVaoLam, ngayNghiViec, diaChi, soDienThoai, email, idChucVu, idPhongBan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_ALL_QUERY = "SELECT idNhanVien, hoTen, ngaySinh, gioiTinh, tinhTrang, ngayVaoLam, ngayNghiViec, diaChi, soDienThoai, email, tenChucVu, tenPhongBan FROM nhanvien nv LEFT JOIN chucvu cv ON nv.idChucVu = cv.idChucVu LEFT JOIN phongban pb ON nv.idPhongBan=pb.idPhongBan;";
+    private static final String UPDATE_QUERY = "UPDATE nhanvien SET hoTen = ?, ngaySinh = ?, gioiTinh = ?, tinhTrang = ?, ngayVaoLam = ?, ngayNghiViec = ?, diaChi = ?, soDienThoai = ?, email = ?, idChucVu = ?, idPhongBan = ? WHERE idNhanVien = ?";
+    private static final String DELETE_QUERY = "DELETE FROM nhanvien WHERE idNhanVien = ?";
     private static DefaultTableModel tableModel;
 
-    public static boolean insert(Student student) {
+    public static boolean insert(NhanVien nhanVien) {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
 
-            preparedStatement.setString(1, student.getName());
-            preparedStatement.setInt(2, student.getAge());
-            preparedStatement.setString(3, student.getAddress());
-            preparedStatement.setDouble(4, student.getGpa());
+            preparedStatement.setString(1, nhanVien.getHoTen());
+            preparedStatement.setDate(2, java.sql.Date.valueOf(nhanVien.getNgaySinh()));
+            preparedStatement.setString(3, nhanVien.getGioiTinh());
+            preparedStatement.setString(4, nhanVien.getTinhTrang());
+            preparedStatement.setDate(5, java.sql.Date.valueOf(nhanVien.getNgayVaoLam()));
+            preparedStatement.setDate(6, java.sql.Date.valueOf(nhanVien.getNgayNghiViec()));
+            preparedStatement.setString(7, nhanVien.getDiaChi());
+            preparedStatement.setString(8, nhanVien.getSoDienThoai());
+            preparedStatement.setString(9, nhanVien.getEmail());
+            preparedStatement.setInt(10, nhanVien.getIdChucVu());
+            preparedStatement.setInt(11, nhanVien.getIdPhongBan());
 
             preparedStatement.executeUpdate();
             return true;
@@ -31,7 +38,7 @@ public class EmployeeDAO {
         return false;
     }
 
-    public static DefaultTableModel getAllStudents() {
+    public static DefaultTableModel getAllEmployees() {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_QUERY);
              ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -63,15 +70,21 @@ public class EmployeeDAO {
         return new DefaultTableModel();
     }
 
-    public static boolean update(Employee student) {
+    public static boolean update(NhanVien nhanVien) {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_QUERY)) {
 
-            preparedStatement.setString(1, student.getName());
-            preparedStatement.setInt(2, student.getAge());
-            preparedStatement.setString(3, student.getAddress());
-            preparedStatement.setDouble(4, student.getGpa());
-            preparedStatement.setInt(5, student.getId());
+            preparedStatement.setString(1, nhanVien.getHoTen());
+            preparedStatement.setDate(2, java.sql.Date.valueOf(nhanVien.getNgaySinh()));
+            preparedStatement.setString(3, nhanVien.getGioiTinh());
+            preparedStatement.setString(4, nhanVien.getTinhTrang());
+            preparedStatement.setDate(5, java.sql.Date.valueOf(nhanVien.getNgayVaoLam()));
+            preparedStatement.setDate(6, java.sql.Date.valueOf(nhanVien.getNgayNghiViec()));
+            preparedStatement.setString(7, nhanVien.getDiaChi());
+            preparedStatement.setString(8, nhanVien.getSoDienThoai());
+            preparedStatement.setString(9, nhanVien.getEmail());
+            preparedStatement.setInt(10, nhanVien.getIdChucVu());
+            preparedStatement.setInt(11, nhanVien.getIdPhongBan());
 
             int rowsAffected = preparedStatement.executeUpdate();
             return rowsAffected > 0;
@@ -99,7 +112,7 @@ public class EmployeeDAO {
 
     public static DefaultTableModel getAllStudentsSortedByGPA() {
         try (Connection connection = ConnectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM student ORDER BY GPA DESC");
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM nhanvien ORDER BY GPA DESC");
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             tableModel = new DefaultTableModel() {
@@ -129,9 +142,9 @@ public class EmployeeDAO {
         return new DefaultTableModel();
     }
 
-    public static DefaultTableModel getAllStudentsSortedByName() {
+    public static DefaultTableModel getAllEmployeeSortedByName() {
         try (Connection connection = ConnectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM student ORDER BY Name");
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM nhanvien ORDER BY Name");
              ResultSet resultSet = preparedStatement.executeQuery()) {
 
             tableModel = new DefaultTableModel() {

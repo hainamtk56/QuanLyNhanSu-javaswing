@@ -2,7 +2,7 @@ package QuanLyNhanVien.Model;
 
 import java.time.LocalDate;
 
-public class Employee {
+public class NhanVien {
     private int idNhanVien;
     private String hoTen;
     private LocalDate ngaySinh;
@@ -17,9 +17,9 @@ public class Employee {
     private int idPhongBan;
 
     // Constructors
-    public Employee() {}
+    public NhanVien() {}
 
-    public Employee(int idNhanVien, String hoTen, LocalDate ngaySinh, String gioiTinh, String tinhTrang, LocalDate ngayVaoLam, LocalDate ngayNghiViec, String diaChi, String soDienThoai, String email, int idChucVu, int idPhongBan) {
+    public NhanVien(int idNhanVien, String hoTen, LocalDate ngaySinh, String gioiTinh, String tinhTrang, LocalDate ngayVaoLam, LocalDate ngayNghiViec, String diaChi, String soDienThoai, String email, int idChucVu, int idPhongBan) {
         this.idNhanVien = idNhanVien;
         this.hoTen = hoTen;
         this.ngaySinh = ngaySinh;
