@@ -44,5 +44,8 @@ Linh: View Thông tin cá nhân: Hiển thị thông tin cá nhân, lương, th�
 		+ View Dự án đang tham gia: Hiển thị các nhiệm vụ cá nhân trong dự án đang tham gia, xác nhận hoàn thành nhiệm vụ
   
 # Lưu ý:
+- Tên bảng viết thường, ví dụ: nhanvien, luongthuong.
+- Tên cột của bảng, tên biến viết Camel case, ví dụ: idNhanVien, hoTen, soDienThoai
+
 Vẫn đang thiếu bảng dự án
 DEADLINE: 22/3/2024
