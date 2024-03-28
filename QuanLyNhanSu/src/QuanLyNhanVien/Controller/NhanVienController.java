@@ -157,9 +157,9 @@ public class NhanVienController {
 
             int columnCount = resultSet.getMetaData().getColumnCount();
 
-
+            String[] columnNames = new String[]{"ID", "Họ Tên", "Ngày Sinh", "Giới Tính", "Tình Trạng", "Ngày Vào Làm", "Ngày Nghỉ Việc", "Địa Chỉ", "Số Điện Thoại", "Email", "Chức Vụ", "Phòng Ban"};
             for (int i = 1; i <= columnCount; i++) {
-                defaultTableModel.addColumn(resultSet.getMetaData().getColumnName(i));
+                defaultTableModel.addColumn(columnNames[i - 1]);
             }
 
             while (resultSet.next()) {
