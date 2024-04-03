@@ -2,6 +2,7 @@ package QuanLyNhanVien.View;
 
 import QuanLyNhanVien.Controller.NhanVienController;
 import QuanLyNhanVien.Model.NhanVien;
+import XuatExcel.ExcelExporter;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -23,7 +24,7 @@ import javax.swing.event.DocumentListener;
 
 
 public class NhanVienView extends JFrame implements ActionListener {
-    private JButton themBtn, suaBtn, xoaBtn, clearBtn;
+    private JButton themBtn, suaBtn, xoaBtn, clearBtn, xuatBtn;
     private final DefaultTableModel defaultTableModel = NhanVienController.getAllEmployees();
     private final JTable nhanVienTable = new JTable(defaultTableModel);
 
@@ -34,7 +35,7 @@ public class NhanVienView extends JFrame implements ActionListener {
     private JComboBox<String> statusFilterComboBox;
     private JComboBox<String> positionFilterComboBox;
     private JComboBox<String> departmentFilterComboBox;
-    TableRowSorter<DefaultTableModel> sorter;
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
     JTextField nameSearchField = new JTextField(11);
     JButton resetButton;
 
@@ -72,19 +73,14 @@ public class NhanVienView extends JFrame implements ActionListener {
                 }
             }
         });
-        sorter = new TableRowSorter<>(defaultTableModel);
-        sorter.setSortable(0, true); // Cột ID
-        sorter.setSortable(1, true); // Cột hoTen
-        sorter.setSortable(2, true); // Cột ngaySinh
-        sorter.setSortable(3, false); // gioi tinh
-        sorter.setSortable(4, false); // tinh trang
-        sorter.setSortable(5, true); // ngay vao lam
-        sorter.setSortable(6, true); // ngay nghi viec
-        sorter.setSortable(7, true); // dia chi
-        sorter.setSortable(8, false); // sdt
-        sorter.setSortable(9, false); // email
-        sorter.setSortable(10, false); // ten chuc vu
-        sorter.setSortable(11, false); // ten phong ban
+        int[] sortableColumns = {0, 1, 2, 6, 7, 8, 9, 10};
+        for (int columnIndex : sortableColumns) {
+            sorter.setSortable(columnIndex, true);
+        }
+        int[] unsortableColumns = {3, 4, 8, 9, 10, 11};
+        for (int columnIndex : unsortableColumns) {
+            sorter.setSortable(columnIndex, false);
+        }
         nhanVienTable.setRowSorter(sorter);
 
         // Tạo FilterActionListener và gắn nó vào các comboBox
@@ -166,6 +162,7 @@ public class NhanVienView extends JFrame implements ActionListener {
         suaBtn = new JButton("Sửa");
         xoaBtn = new JButton("Xóa");
         clearBtn = new JButton("Clear");
+        xuatBtn = new JButton("Xuất Excel");
 
 
         JLabel idNhanVienLabel = new JLabel("ID");
@@ -244,8 +241,9 @@ public class NhanVienView extends JFrame implements ActionListener {
 
         panel.add(themBtn);
         panel.add(suaBtn);
-//        panel.add(xoaBtn);
+        panel.add(xoaBtn);
         panel.add(clearBtn);
+        panel.add(xuatBtn);
 
         // filter
         layout.putConstraint(SpringLayout.WEST, filterPanel, 20, SpringLayout.WEST, panel);
@@ -327,17 +325,22 @@ public class NhanVienView extends JFrame implements ActionListener {
         layout.putConstraint(SpringLayout.EAST, suaBtn, -19, SpringLayout.EAST, panel);
         layout.putConstraint(SpringLayout.NORTH, suaBtn, 25, SpringLayout.SOUTH, scrollPaneTable);
 
-        layout.putConstraint(SpringLayout.EAST, clearBtn, -19, SpringLayout.EAST, panel);
-        layout.putConstraint(SpringLayout.NORTH, clearBtn, 85, SpringLayout.SOUTH, scrollPaneTable);
-        layout.putConstraint(SpringLayout.WEST, clearBtn, 17, SpringLayout.EAST, tenPhongBanComboBox);
+        layout.putConstraint(SpringLayout.NORTH, clearBtn, 20, SpringLayout.SOUTH, themBtn);
+        layout.putConstraint(SpringLayout.WEST, clearBtn, 0, SpringLayout.WEST, themBtn);
 
-        layout.putConstraint(SpringLayout.EAST, xoaBtn, -19, SpringLayout.EAST, panel);
-        layout.putConstraint(SpringLayout.NORTH, xoaBtn, 85, SpringLayout.SOUTH, scrollPaneTable);
+        // xoa btn
+        layout.putConstraint(SpringLayout.NORTH, xoaBtn, 20, SpringLayout.SOUTH, suaBtn);
+        layout.putConstraint(SpringLayout.WEST, xoaBtn, 0, SpringLayout.WEST, suaBtn);
+
+        // xuatBtn
+        layout.putConstraint(SpringLayout.NORTH, xuatBtn, 20, SpringLayout.SOUTH, xoaBtn);
+        layout.putConstraint(SpringLayout.WEST, xuatBtn, 30, SpringLayout.WEST, themBtn);
 
         themBtn.addActionListener(this);
         suaBtn.addActionListener(this);
         xoaBtn.addActionListener(this);
         clearBtn.addActionListener(this);
+        xuatBtn.addActionListener(this);
         resetButton.addActionListener(this);
 
         nhanVienTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -387,6 +390,7 @@ public class NhanVienView extends JFrame implements ActionListener {
         add(panel);
         setTitle("Quản Lý Nhân Viên");
         setSize(1300, 593);
+        setLocationRelativeTo(null); //đặt jframe ở giữa màn hình
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -399,7 +403,48 @@ public class NhanVienView extends JFrame implements ActionListener {
         if (e.getSource() == resetButton) {
             resetFiltersAndSearch();
         }
+        if (e.getSource() == xuatBtn) {
+            exportExcel();
+        }
+
     }
+
+    public void exportExcel() {
+        // Lấy số lượng cột từ bảng gốc
+        int columnCount = defaultTableModel.getColumnCount();
+        // Tạo bảng mới để chứa dữ liệu đã lọc
+        DefaultTableModel filteredModel = new DefaultTableModel();
+        // Thêm các cột vào bảng mới
+        for (int i = 0; i < columnCount; i++) {
+            filteredModel.addColumn(defaultTableModel.getColumnName(i));
+        }
+        // Lấy số lượng dòng đã lọc
+        int rowCount = nhanVienTable.getRowCount();
+        // Lặp qua các dòng đã lọc
+        for (int i = 0; i < rowCount; i++) {
+            // Nếu dòng đó được hiển thị (không bị ẩn do bộ lọc)
+            if (nhanVienTable.convertRowIndexToModel(i) != -1) {
+                // Lấy dòng dữ liệu từ bảng gốc
+                Object[] rowData = new Object[columnCount];
+                for (int j = 0; j < columnCount; j++) {
+                    if (j == 2 || j == 5 || j == 6) { // Kiểm tra các cột ngày
+                        // Chuyển đổi java.sql.Date thành LocalDate
+                        java.sql.Date sqlDate = (java.sql.Date) nhanVienTable.getValueAt(i, j);
+                        // Kiểm tra nếu sqlDate không phải là null, thì chuyển đổi thành LocalDate, ngược lại để giá trị rỗng
+                        LocalDate localDate = (sqlDate != null) ? sqlDate.toLocalDate() : null;
+                        rowData[j] = localDate;
+                    } else {
+                        rowData[j] = nhanVienTable.getValueAt(i, j);
+                    }
+                }
+                // Thêm dòng dữ liệu vào bảng mới
+                filteredModel.addRow(rowData);
+            }
+        }
+        // Xuất Excel với dữ liệu đã lọc
+        ExcelExporter.exportToExcel(filteredModel, "C:\\UTT\\java\\xuatExcel\\nhanvien.xlsx");
+    }
+
 
     private void resetFiltersAndSearch() {
         genderFilterComboBox.setSelectedItem("Tất cả");
@@ -505,7 +550,16 @@ public class NhanVienView extends JFrame implements ActionListener {
 
     public NhanVien getNhanVien() {
         NhanVien nhanVien = new NhanVien();
-        nhanVien.setIdNhanVien(Integer.parseInt(getIdNhanVienField().getText()));
+        String idNhanVienText = getIdNhanVienField().getText();
+        if (idNhanVienText != null && !idNhanVienText.isEmpty()) {
+            try {
+                int idNhanVien = Integer.parseInt(idNhanVienText);
+                nhanVien.setIdNhanVien(idNhanVien);
+            } catch (NumberFormatException ex) {
+                System.out.println(":)");
+            }
+        }
+
         nhanVien.setHoTen(getHoTenField().getText());
         nhanVien.setNgaySinh(LocalDate.parse(getNgaySinhField().getText()));
         nhanVien.setGioiTinh((String) getGioiTinhComboBox().getSelectedItem());
@@ -550,7 +604,7 @@ public class NhanVienView extends JFrame implements ActionListener {
                 // Nếu lựa chọn là "Tất cả", thì xóa bộ lọc cho cột đó
                 activeFilters.remove(columnIndex);
             } else {
-                RowFilter<Object, Object> filter = RowFilter.regexFilter(selectedValue, columnIndex);
+                RowFilter<Object, Object> filter = RowFilter.regexFilter("^" + Pattern.quote(selectedValue) + "$", columnIndex);
                 // Cập nhật bộ lọc mới vào HashMap
                 activeFilters.put(columnIndex, filter);
             }

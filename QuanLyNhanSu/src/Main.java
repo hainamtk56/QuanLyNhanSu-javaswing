@@ -1,13 +1,13 @@
 import Example.Controller.Controller;
 import Example.Model.Model;
-import Example.View.View;
+//import Example.LuongView.LuongView;
 
 
 public class Main {
     public static void main(String[] args) {
-        Model model = new Model();
-        View view = new View();
-        Controller controller = new Controller(model, view);
+//        Luong model = new Luong();
+//        LuongView view = new LuongView();
+//        LuongController controller = new LuongController(model, view);
     }
 }
 

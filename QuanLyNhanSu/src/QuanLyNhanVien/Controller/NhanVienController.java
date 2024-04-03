@@ -239,6 +239,20 @@ public class NhanVienController {
         }
     }
 
+    public static ArrayList<Integer> getAllIdNhanVienFromDatabase() {
+        ArrayList<Integer> idNhanVienList = new ArrayList<>();
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT idNhanVien FROM nhanvien ORDER BY idNhanVien");
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+            while (resultSet.next()) {
+                idNhanVienList.add(resultSet.getInt("idNhanVien"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return idNhanVienList;
+    }
+
     public static ArrayList<String> getAllChucVuFromDatabase() {
         ArrayList<String> chucVuList = new ArrayList<>();
         try (Connection connection = ConnectionManager.getConnection();

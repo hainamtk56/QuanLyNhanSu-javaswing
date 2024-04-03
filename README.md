@@ -8,11 +8,11 @@ Chạy thử DatabaseConnectionTest để kiểm tra kết nối
 *Nhớ import package ConnectionManager.ConnectionManager khi muốn mở connection đến database*
 
 # Cấu trúc dự án:
-Các view đều có folder riêng, ai làm phần nào thì làm trong folder đấy
+Các luongView đều có folder riêng, ai làm phần nào thì làm trong folder đấy
 
 Các Controller, View, Model bỏ riêng vào thư mục tương ứng như ví dụ có sẵn trong mỗi folder
 
-Muốn chạy view nào thì về main tạo model, view, controller tương ứng
+Muốn chạy luongView nào thì về main tạo luong, luongView, controller tương ứng
 
 # Phân việc 
 Tùng: - View đăng nhập đăng kí quên mật khẩu

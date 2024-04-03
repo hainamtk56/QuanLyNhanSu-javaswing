@@ -1,31 +1,32 @@
 package Example.Controller;
 
-import Example.Model.Model;
-import Example.View.View;
+
+import QuanLyLuong.Model.Luong;
+import QuanLyLuong.View.LuongView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Controller {
-    private Model model;
-    private View view;
+    private Luong luong;
+    private LuongView luongView;
 
 
-    public Controller(Model model, View view) {
-        this.model = model;
-        this.view = view;
+    public Controller(Luong luong, LuongView luongView) {
+        this.luong = luong;
+        this.luongView = luongView;
 
-        view.addButtonClickListener(new ButtonClickListener());
+//        luongView.addButtonClickListener(new ButtonClickListener());
     }
 
 
     public class ButtonClickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String input = view.getInputText();
-            model.setData(input);
-            view.setButtonText(input);
-            view.displayMessage("Data has been updated: " + input);
+//            String input = luongView.getInputText();
+//            luong.setData(input);
+//            luongView.setButtonText(input);
+//            luongView.displayMessage("Data has been updated: " + input);
 
 
         }
