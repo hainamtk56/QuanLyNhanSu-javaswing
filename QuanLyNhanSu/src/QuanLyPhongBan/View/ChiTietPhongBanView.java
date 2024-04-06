@@ -1,5 +1,7 @@
 package QuanLyPhongBan.View;
 
+import ConnectionManager.ConnectionManager;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -7,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import ConnectionManager.ConnectionManager;
 
 public class ChiTietPhongBanView extends JFrame {
     private static int idPhongBan;
@@ -27,20 +28,17 @@ public class ChiTietPhongBanView extends JFrame {
         model.addColumn("Tên Nhân Viên");
 
         try {
-            // Kết nối đến cơ sở dữ liệu sử dụng ConnectionManager
             Connection connection = ConnectionManager.getConnection();
             String sql = "SELECT hoTen FROM nhanvien WHERE idPhongBan = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, idPhongBan);
             ResultSet resultSet = statement.executeQuery();
 
-            // Thêm tên nhân viên vào model
             while (resultSet.next()) {
                 String tenNhanVien = resultSet.getString("hoTen");
                 model.addRow(new Object[]{tenNhanVien});
             }
 
-            // Đặt model cho bảng nhân viên
             nhanVienTable.setModel(model);
 
             // Đóng kết nối
@@ -54,12 +52,10 @@ public class ChiTietPhongBanView extends JFrame {
 
 
     public static void main(String[] args) {
-        // Lấy idPhongBan và tenPhongBan từ tham số args
-        int idPhongBan = Integer.parseInt(args[0]); // Giả sử idPhongBan là tham số đầu tiên
-        String tenPhongBan = args[1]; // Giả sử tenPhongBan là tham số thứ hai
+        int idPhongBan = Integer.parseInt(args[0]);
+        String tenPhongBan = args[1];
 
         SwingUtilities.invokeLater(() -> {
-            // Tạo một phiên bản mới của ChiTietPhongBanView và chuyển dữ liệu
             ChiTietPhongBanView chiTietPhongBanView = new ChiTietPhongBanView(idPhongBan, tenPhongBan);
             chiTietPhongBanView.setVisible(true);
         });

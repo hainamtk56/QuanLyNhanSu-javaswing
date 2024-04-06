@@ -4,8 +4,12 @@ import QuanLyDuAn.Controller.DuAnController;
 import QuanLyDuAn.Model.DuAn;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,12 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import javax.swing.table.TableRowSorter;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.JComboBox;
-import javax.swing.RowFilter;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 
 public class DuAnView extends JFrame implements ActionListener {
@@ -157,7 +155,7 @@ public class DuAnView extends JFrame implements ActionListener {
         filterPanel.add(resetButton);
         filterPanel.add(searchPanel);
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         themBtn = new JButton("Thêm");
         suaBtn = new JButton("Sửa");
@@ -356,7 +354,7 @@ public class DuAnView extends JFrame implements ActionListener {
         add(panel);
         setTitle("Quản Lý Dự Án");
         setSize(1300, 593);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 

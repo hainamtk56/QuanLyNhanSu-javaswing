@@ -1,4 +1,4 @@
-package QuanLyDuAn.Controller;
+package QuanLyDuAn;
 
 import ConnectionManager.ConnectionManager;
 import QuanLyDuAn.View.DuAnView;

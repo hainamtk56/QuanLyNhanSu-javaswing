@@ -8,8 +8,17 @@
       <root url="jar://$USER_HOME$/Desktop/xuatExcelLibs/poi-ooxml-5.0.0.jar!/" />
       <root url="jar://$USER_HOME$/Desktop/xuatExcelLibs/poi-ooxml-full-5.0.0.jar!/" />
       <root url="jar://$USER_HOME$/Desktop/xuatExcelLibs/xmlbeans-4.0.0.jar!/" />
+      <root url="file://$PROJECT_DIR$/QuanLyNhanSu/xuatExcelLibs" />
+      <root url="jar://$PROJECT_DIR$/QuanLyNhanSu/xuatExcelLibs/xmlbeans-4.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/QuanLyNhanSu/xuatExcelLibs/poi-ooxml-full-5.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/QuanLyNhanSu/xuatExcelLibs/poi-ooxml-5.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/QuanLyNhanSu/xuatExcelLibs/poi-5.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/QuanLyNhanSu/xuatExcelLibs/commons-math3-3.6.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/QuanLyNhanSu/xuatExcelLibs/commons-compress-1.20.jar!/" />
+      <root url="jar://$PROJECT_DIR$/QuanLyNhanSu/xuatExcelLibs/commons-collections4-4.4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/QuanLyNhanSu/xuatExcelLibs" recursive="false" />
   </library>
 </component>

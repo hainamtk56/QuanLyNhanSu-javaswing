@@ -2,13 +2,19 @@ package DangNhap.View;
 
 import DangNhap.Controller.LoginCtrl;
 import DangNhap.Model.Login;
+import Menu.*;
+import UserThings.Controller.ThongTinNhanVienController;
+import UserThings.Model.NhanVien;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class LoginView extends JFrame implements ActionListener {
+
+    private Menu menuView;
     private JLabel titleLable;
     private JLabel tenDangNhapLable;
     private JLabel matKhauLable;
@@ -83,14 +89,12 @@ public class LoginView extends JFrame implements ActionListener {
             LoginCtrl loginCtrl = new LoginCtrl();
             String role = loginCtrl.getRole(username, password);
 
-            // Chuyển hướng đến view tương ứng với vai trò
             if (role.equals("Quản trị viên")) {
-                ViewAdmin adminView = new ViewAdmin(); // Thay thế ViewAdmin bằng tên thực của view quản trị viên
-                adminView.setVisible(true);
+                MenuController menuController = new MenuController(); // Thay thế ViewAdmin bằng tên thực của view quản trị viên
                 this.dispose(); // Đóng cửa sổ đăng nhập sau khi chuyển đến view quản trị viên
             } else if (role.equals("Người dùng")) {
-                ViewUser userView = new ViewUser(); // Thay thế ViewUser bằng tên thực của view người dùng
-                userView.setVisible(true);
+                NhanVien nhanVien = new NhanVien();
+                ThongTinNhanVienController thongTinNhanVienController = new ThongTinNhanVienController(nhanVien); // Thay thế ViewUser bằng tên thực của view người dùng
                 this.dispose(); // Đóng cửa sổ đăng nhập sau khi chuyển đến view người dùng
             } else {
                 // Hiển thị thông báo lỗi nếu vai trò không hợp lệ

@@ -3,7 +3,6 @@ package QuanLyLuong.View;
 import QuanLyLuong.Controller.LuongController;
 import QuanLyLuong.Model.Luong;
 import QuanLyNhanVien.Controller.NhanVienController;
-import QuanLyNhanVien.MainFrame;
 import XuatExcel.ExcelExporter;
 
 import javax.swing.*;
@@ -74,7 +73,7 @@ public class LuongView extends JFrame implements ActionListener {
         setTitle("Quản Lý Lương");
         setSize(1460, 540);
         setLocationRelativeTo(null); //đặt jframe ở giữa màn hình
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 

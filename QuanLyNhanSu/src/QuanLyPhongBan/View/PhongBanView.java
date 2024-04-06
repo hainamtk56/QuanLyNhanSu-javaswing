@@ -6,7 +6,6 @@ import QuanLyPhongBan.Controller.PhongBanViewListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -31,7 +30,7 @@ public class PhongBanView extends JFrame {
     }
 
     private void initComponents() {
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         addBtn = new JButton("Thêm");
         editBtn = new JButton("Sửa");

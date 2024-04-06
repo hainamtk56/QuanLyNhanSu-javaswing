@@ -1,23 +1,24 @@
 package DangNhap.Controller;
-import ConnectionManager.ConnectionManager;
 
+import ConnectionManager.ConnectionManager;
 import DangNhap.Model.Login;
 import DangNhap.View.LoginView;
-import DangNhap.View.RegisterView;
+import Menu.*;
 
 import javax.swing.*;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
+import java.sql.*;
 
 public class LoginCtrl {
+
+    private MenuView menuView;
+
+    private MenuController menuController;
+
+    private MenuModel menuModel;
+
     private Connection conn;
     LoginView view;
     Login model;
@@ -55,6 +56,8 @@ public class LoginCtrl {
         }
     }
 
+
+
     public String getRole(String username, String password) {
         String role = "";
         try {
@@ -76,6 +79,27 @@ public class LoginCtrl {
         return role;
     }
 
+    public int getID(String username, String password) {
+        int id = 0;
+        try {
+            Connection connection = ConnectionManager.getConnection();
+            String sql = "SELECT idNhanVien FROM taikhoannguoidung WHERE tenDangNhap = ? AND matKhau = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                id = resultSet.getInt("idNhanVien");
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+
     class Controller_action_listener implements ActionListener {
         Controller_action_listener() {
         }
@@ -89,7 +113,7 @@ public class LoginCtrl {
                 JOptionPane.showMessageDialog((Component)null, "Đăng nhập thành công");
                 SwingUtilities.invokeLater(new Runnable() {
                     public void run() {
-//                        new MenuView();
+                        view.dispose();
                     }
                 });
             } else {
