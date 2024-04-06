@@ -47,10 +47,13 @@ public class LuongController {
 
             int columnCount = resultSet.getMetaData().getColumnCount();
 
-//            String[] columnNames = new String[]{"ID Lương", "Họ Tên", "Ngày Sinh", "Giới Tính", "Tình Trạng", "Ngày Vào Làm", "Ngày Nghỉ Việc", "Địa Chỉ", "Số Điện Thoại", "Email", "Chức Vụ", "Phòng Ban"};
+            String[] columnNames = new String[]{"ID Lương", "ID Nhân Viên", "Họ Tên", "Tình Trạng", "Chức Vụ", "Phòng Ban", "Tiền Công Một Giờ",  "Năm", "Tháng", "Số Giờ Làm", "Thưởng", "Thực Lãnh"};
             for (int i = 1; i <= columnCount; i++) {
-                defaultTableModel.addColumn(resultSet.getMetaData().getColumnName(i));
+                defaultTableModel.addColumn(columnNames[i - 1]);
             }
+//            for (int i = 1; i <= columnCount; i++) {
+//                defaultTableModel.addColumn(resultSet.getMetaData().getColumnName(i));
+//            }
 
             while (resultSet.next()) {
                 Object[] row = new Object[columnCount];

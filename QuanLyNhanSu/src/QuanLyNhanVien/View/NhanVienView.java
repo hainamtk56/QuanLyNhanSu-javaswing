@@ -1,5 +1,7 @@
 package QuanLyNhanVien.View;
 
+import QuanLyLuong.Controller.LuongController;
+import QuanLyLuong.View.LuongView;
 import QuanLyNhanVien.Controller.NhanVienController;
 import QuanLyNhanVien.Model.NhanVien;
 import XuatExcel.ExcelExporter;
@@ -22,7 +24,7 @@ import java.util.regex.Pattern;
 
 
 public class NhanVienView extends JFrame implements ActionListener {
-    private JButton themBtn, suaBtn, xoaBtn, clearBtn, xuatBtn;
+    private JButton themBtn, suaBtn, xoaBtn, clearBtn, xuatBtn, themLuongBtn;
     private final DefaultTableModel defaultTableModel = NhanVienController.getAllEmployees();
     private final JTable nhanVienTable = new JTable(defaultTableModel);
 
@@ -160,7 +162,8 @@ public class NhanVienView extends JFrame implements ActionListener {
         suaBtn = new JButton("Sửa");
         xoaBtn = new JButton("Xóa");
         clearBtn = new JButton("Clear");
-        xuatBtn = new JButton("Xuất Excel");
+        xuatBtn = new JButton("Xuất");
+        themLuongBtn = new JButton("Thêm Lương");
 
 
         JLabel idNhanVienLabel = new JLabel("ID");
@@ -242,6 +245,7 @@ public class NhanVienView extends JFrame implements ActionListener {
         panel.add(xoaBtn);
         panel.add(clearBtn);
         panel.add(xuatBtn);
+        panel.add(themLuongBtn);
 
         // filter
         layout.putConstraint(SpringLayout.WEST, filterPanel, 20, SpringLayout.WEST, panel);
@@ -330,14 +334,19 @@ public class NhanVienView extends JFrame implements ActionListener {
         layout.putConstraint(SpringLayout.NORTH, xoaBtn, 20, SpringLayout.SOUTH, suaBtn);
         layout.putConstraint(SpringLayout.WEST, xoaBtn, 0, SpringLayout.WEST, suaBtn);
 
+        // them luong
+        layout.putConstraint(SpringLayout.NORTH, themLuongBtn, 20, SpringLayout.SOUTH, clearBtn);
+        layout.putConstraint(SpringLayout.WEST, themLuongBtn, 0, SpringLayout.WEST, clearBtn);
+
         // xuatBtn
         layout.putConstraint(SpringLayout.NORTH, xuatBtn, 20, SpringLayout.SOUTH, xoaBtn);
-        layout.putConstraint(SpringLayout.WEST, xuatBtn, 30, SpringLayout.WEST, themBtn);
+        layout.putConstraint(SpringLayout.WEST, xuatBtn, 20, SpringLayout.EAST, themLuongBtn);
 
         themBtn.addActionListener(this);
         suaBtn.addActionListener(this);
         xoaBtn.addActionListener(this);
         clearBtn.addActionListener(this);
+        themLuongBtn.addActionListener(this);
         xuatBtn.addActionListener(this);
         resetButton.addActionListener(this);
 
@@ -404,7 +413,12 @@ public class NhanVienView extends JFrame implements ActionListener {
         if (e.getSource() == xuatBtn) {
             exportExcel();
         }
-
+        if (e.getSource() == themLuongBtn) {
+            LuongController luongController = new LuongController();
+            LuongView.setIdNhanVienComboBox(getNhanVien().getIdNhanVien());
+            LuongView.setYearComboBoxToCurrentYear();
+            LuongView.setMonthComboBoxToCurrentMonth();
+        }
     }
 
     public void exportExcel() {
