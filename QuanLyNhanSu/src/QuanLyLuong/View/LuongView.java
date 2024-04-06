@@ -3,7 +3,6 @@ package QuanLyLuong.View;
 import QuanLyLuong.Controller.LuongController;
 import QuanLyLuong.Model.Luong;
 import QuanLyNhanVien.Controller.NhanVienController;
-import QuanLyNhanVien.MainFrame;
 import XuatExcel.ExcelExporter;
 
 import javax.swing.*;
@@ -35,10 +34,10 @@ public class LuongView extends JFrame implements ActionListener {
     TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
     // edit field
     // panel 1
-    JTextField idLuongField = new JTextField();
+    static JTextField idLuongField = new JTextField();
     static JComboBox<Integer> idNhanVienComboBox = new JComboBox<>();
-    JComboBox<Integer> yearComboBox;
-    JComboBox<Integer> monthComboBox;
+    static JComboBox<Integer> yearComboBox;
+    static JComboBox<Integer> monthComboBox;
     static JTextField soGioLamField = new JTextField();
     //panel 4
     static JTextField thuongField = new JTextField();
@@ -247,7 +246,7 @@ public class LuongView extends JFrame implements ActionListener {
                 // Nếu lựa chọn là "Tất cả", thì xóa bộ lọc cho cột đó
                 activeFilters.remove(columnIndex);
             } else {
-                RowFilter<Object, Object> filter = RowFilter.regexFilter(selectedValue, columnIndex);
+                RowFilter<Object, Object> filter = RowFilter.regexFilter("^" + Pattern.quote(selectedValue) + "$", columnIndex);
                 // Cập nhật bộ lọc mới vào HashMap
                 activeFilters.put(columnIndex, filter);
             }
@@ -465,6 +464,7 @@ public class LuongView extends JFrame implements ActionListener {
 
         return panel;
     }
+
     private static class TextFieldChangeListener implements DocumentListener {
         @Override
         public void insertUpdate(DocumentEvent e) {
@@ -494,6 +494,7 @@ public class LuongView extends JFrame implements ActionListener {
             }
         }
     }
+
     public void addThemBtnListener(ActionListener listener) {
         themBtn.addActionListener(listener);
     }
@@ -561,4 +562,19 @@ public class LuongView extends JFrame implements ActionListener {
     public JTable getLuongTable() {
         return luongTable;
     }
+
+    public static void setIdNhanVienComboBox(int idNhanVien) {
+        idNhanVienComboBox.setSelectedItem(idNhanVien);
+    }
+
+    // set year combobox to current year
+    static int currentYear = LocalDate.now().getYear();
+    static int currentMonth = LocalDate.now().getMonthValue();
+    public static void setYearComboBoxToCurrentYear() {
+        yearComboBox.setSelectedItem(currentYear);
+    }
+    public static void setMonthComboBoxToCurrentMonth() {
+        monthComboBox.setSelectedItem(currentMonth);
+    }
 }
+
