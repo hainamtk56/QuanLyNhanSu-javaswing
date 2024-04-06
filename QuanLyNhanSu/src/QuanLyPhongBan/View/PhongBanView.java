@@ -1,114 +1,149 @@
 package QuanLyPhongBan.View;
 
-import ConnectionManager.ConnectionManager;
 import QuanLyPhongBan.Controller.PhongBanDAO;
 import QuanLyPhongBan.Controller.PhongBanViewListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import javax.swing.table.TableRowSorter;
+import javax.swing.table.TableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PhongBanView extends JFrame {
-    private PhongBanDAO phongBanDAO;
+    private final PhongBanDAO phongBanDAO;
     private PhongBanViewListener listener;
-    private JButton addBtn, editBtn, deleteBtn, clearBtn;
+    private JTextField tenPhongBanField;
+    private JTextField idPhongBanField;
+    private JButton addBtn;
+    private JButton editBtn;
+    private JButton deleteBtn;
+    private JButton sortByIdBtn;
+    private JButton sortByNameBtn;
     private JScrollPane scrollPaneTable;
-    private DefaultTableModel defaultTableModel = PhongBanDAO.getAllDepartments();
-    private JTable phongBanTable = new JTable(defaultTableModel);
-
-    private JLabel idPhongBanLabel, tenPhongBanLabel;
-
-    private JTextField idPhongBanField, tenPhongBanField;
+    private final DefaultTableModel defaultTableModel;
+    private int selectedIdPhongBan; // Declare the variable to store selected ID
 
     public PhongBanView() {
-        ConnectionManager.getConnection();
         phongBanDAO = new PhongBanDAO();
-        listener = new PhongBanViewListener(phongBanDAO);
+        defaultTableModel = PhongBanDAO.getAllDepartments();
         initComponents();
     }
 
     private void initComponents() {
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(defaultTableModel);
-        phongBanTable.setRowSorter(sorter);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         addBtn = new JButton("Thêm");
         editBtn = new JButton("Sửa");
         deleteBtn = new JButton("Xóa");
-        clearBtn = new JButton("Clear");
-
-        idPhongBanLabel = new JLabel("ID Phòng Ban");
-        tenPhongBanLabel = new JLabel("Tên Phòng Ban");
+        sortByIdBtn = new JButton("Sắp xếp theo ID");
+        sortByNameBtn = new JButton("Sắp xếp theo tên");
 
         idPhongBanField = new JTextField(6);
         idPhongBanField.setEditable(false);
         tenPhongBanField = new JTextField(15);
 
-        scrollPaneTable = new JScrollPane(phongBanTable);
-        scrollPaneTable.setPreferredSize(new Dimension(1247, 400));
+        scrollPaneTable = new JScrollPane();
+        JTable phongBanTable = new JTable(defaultTableModel);
+        scrollPaneTable.setViewportView(phongBanTable);
 
-        SpringLayout layout = new SpringLayout();
         JPanel panel = new JPanel();
-        panel.setSize(1300, 800);
+        GroupLayout layout = new GroupLayout(panel);
         panel.setLayout(layout);
-        panel.add(scrollPaneTable);
 
-        panel.add(idPhongBanLabel);
-        panel.add(tenPhongBanLabel);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
 
-        panel.add(idPhongBanField);
-        panel.add(tenPhongBanField);
+        JLabel idLabel = new JLabel("ID Phòng Ban");
+        JLabel tenLabel = new JLabel("Tên Phòng Ban");
 
-        panel.add(addBtn);
-        panel.add(editBtn);
-        panel.add(deleteBtn);
-        panel.add(clearBtn);
+        layout.setHorizontalGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(scrollPaneTable)
+                        .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(idLabel)
+                                        .addComponent(tenLabel))
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(idPhongBanField)
+                                        .addComponent(tenPhongBanField)
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addComponent(addBtn)
+                                                .addComponent(editBtn)
+                                                .addComponent(deleteBtn)
+                                                .addComponent(sortByIdBtn)
+                                                .addComponent(sortByNameBtn))))));
 
-        // Bảng phòng ban
-        layout.putConstraint(SpringLayout.WEST, scrollPaneTable, 20, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, scrollPaneTable, 20, SpringLayout.NORTH, panel);
+        layout.setVerticalGroup(layout.createSequentialGroup()
+                .addComponent(scrollPaneTable)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(idLabel)
+                        .addComponent(idPhongBanField))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(tenLabel)
+                        .addComponent(tenPhongBanField))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(addBtn)
+                        .addComponent(editBtn)
+                        .addComponent(deleteBtn)
+                        .addComponent(sortByIdBtn)
+                        .addComponent(sortByNameBtn)));
 
-        // Cột 1
-        layout.putConstraint(SpringLayout.WEST, idPhongBanLabel, 20, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, idPhongBanLabel, 20, SpringLayout.SOUTH, scrollPaneTable);
-        layout.putConstraint(SpringLayout.WEST, idPhongBanField, 110, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, idPhongBanField, 20, SpringLayout.SOUTH, scrollPaneTable);
+        // Initialize listener
+        listener = new PhongBanViewListener(phongBanDAO, defaultTableModel, phongBanTable);
+        listener.setTenPhongBanField(tenPhongBanField);
+        listener.setIdPhongBanField(idPhongBanField);
 
-        layout.putConstraint(SpringLayout.WEST, tenPhongBanLabel, 300, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, tenPhongBanLabel, 20, SpringLayout.SOUTH, scrollPaneTable);
-        layout.putConstraint(SpringLayout.WEST, tenPhongBanField, 400, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, tenPhongBanField, 20, SpringLayout.SOUTH, scrollPaneTable);
+        // Add listeners to buttons
+        addBtn.addActionListener(listener.createAddBtnListener(tenPhongBanField));
+        editBtn.addActionListener(listener.createEditBtnListener(tenPhongBanField));
+        deleteBtn.addActionListener(listener.createDeleteBtnListener());
+        sortByIdBtn.addActionListener(listener.createSortByIdBtnListener());
+        sortByNameBtn.addActionListener(listener.createSortByNameBtnListener());
 
-        // Nút
-        layout.putConstraint(SpringLayout.WEST, addBtn, 700, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, addBtn, 25, SpringLayout.SOUTH, scrollPaneTable);
+        // Sự kiện double click vào bảng phòng ban
+        // Add mouse listener to phongBanTable for double-click event
+        phongBanTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Check if the user double-clicks
+                if (e.getClickCount() == 2) {
+                    // Get the selected row index
+                    int selectedRow = phongBanTable.getSelectedRow();
+                    if (selectedRow != -1) {
+                        // Get data from the selected row
+                        int idPhongBan = (int) defaultTableModel.getValueAt(selectedRow, 0);
+                        String tenPhongBan = (String) defaultTableModel.getValueAt(selectedRow, 1);
 
-        layout.putConstraint(SpringLayout.WEST, editBtn, 800, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, editBtn, 25, SpringLayout.SOUTH, scrollPaneTable);
+                        // Create a new instance of ChiTietPhongBanView and pass data
+                        ChiTietPhongBanView chiTietPhongBanView = new ChiTietPhongBanView(idPhongBan, tenPhongBan);
+                        chiTietPhongBanView.setVisible(true);
+                    }
+                }
+            }
+        });
 
-        layout.putConstraint(SpringLayout.WEST, clearBtn, 700, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, clearBtn, 85, SpringLayout.SOUTH, scrollPaneTable);
+        phongBanTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = phongBanTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    TableModel model = phongBanTable.getModel();
+                    String tenPhongBan = (String) model.getValueAt(selectedRow, 1);
+                    int idPhongBan = (int) model.getValueAt(selectedRow, 0);
+                    idPhongBanField.setText(String.valueOf(idPhongBan));
+                    tenPhongBanField.setText(tenPhongBan);
+                }
+            }
+        });
 
-        layout.putConstraint(SpringLayout.WEST, deleteBtn, 800, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, deleteBtn, 85, SpringLayout.SOUTH, scrollPaneTable);
-
-        clearBtn.addActionListener(this::clearFieldsActionPerformed);
 
         add(panel);
         setTitle("Quản Lý Phòng Ban");
-        setSize(1300, 800);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 600);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    private void clearFieldsActionPerformed(ActionEvent e) {
-        clearFields();
-    }
-
-    private void clearFields() {
-        idPhongBanField.setText("");
-        tenPhongBanField.setText("");
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(PhongBanView::new);
     }
 }

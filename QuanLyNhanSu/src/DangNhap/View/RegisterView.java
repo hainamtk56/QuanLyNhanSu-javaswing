@@ -9,10 +9,10 @@ public class RegisterView extends JFrame implements ActionListener {
     private JLabel titleLable;
     private JLabel tenDangNhapLable;
     private JLabel matKhauLable;
-    private JLabel vaiTroLable; // Thêm nhãn vaiTroLable
+    private JLabel nhapLaiMatKhauLable; // Thêm nhãn nhập lại mật khẩu
     private JTextField tenDangNhapField;
     private JTextField matKhauField;
-    private JTextField vaiTroField; // Thêm trường vaiTroField
+    private JTextField nhapLaiMatKhauField; // Thêm trường nhập lại mật khẩu
     private JButton dangKyBtn;
 
     public RegisterView() {
@@ -24,11 +24,12 @@ public class RegisterView extends JFrame implements ActionListener {
         titleLable = new JLabel("Đăng ký");
         tenDangNhapLable = new JLabel("Tên ĐN: ");
         matKhauLable = new JLabel("Mật khẩu: ");
-        vaiTroLable = new JLabel("Vai trò: "); // Khởi tạo nhãn vaiTroLable
+        nhapLaiMatKhauLable = new JLabel("Nhập lại: ");
         dangKyBtn = new JButton("Đăng ký");
         tenDangNhapField = new JTextField(30);
-        matKhauField = new JTextField(30);
-        vaiTroField = new JTextField(30); // Khởi tạo trường vaiTroField
+        matKhauField = new JPasswordField(30);
+        nhapLaiMatKhauField = new JPasswordField(30);
+
         SpringLayout layout = new SpringLayout();
         JPanel panel = new JPanel();
         panel.setSize(500, 200);
@@ -37,24 +38,24 @@ public class RegisterView extends JFrame implements ActionListener {
         panel.add(titleLable);
         panel.add(tenDangNhapLable);
         panel.add(matKhauLable);
-        panel.add(vaiTroLable); // Thêm nhãn vaiTroLable vào panel
+        panel.add(nhapLaiMatKhauLable);
         panel.add(tenDangNhapField);
         panel.add(matKhauField);
-        panel.add(vaiTroField); // Thêm trường vaiTroField vào panel
+        panel.add(nhapLaiMatKhauField);
         layout.putConstraint(SpringLayout.WEST, titleLable, 220, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, titleLable, 20, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.WEST, tenDangNhapLable, 20, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, tenDangNhapLable, 50, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.WEST, matKhauLable, 20, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, matKhauLable, 80, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.WEST, vaiTroLable, 20, SpringLayout.WEST, panel); // Sắp xếp nhãn vaiTroLable
-        layout.putConstraint(SpringLayout.NORTH, vaiTroLable, 110, SpringLayout.NORTH, panel); // Sắp xếp nhãn vaiTroLable
+        layout.putConstraint(SpringLayout.WEST, nhapLaiMatKhauLable, 20, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, nhapLaiMatKhauLable, 110, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.WEST, tenDangNhapField, 100, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, tenDangNhapField, 50, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.WEST, matKhauField, 100, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, matKhauField, 80, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.WEST, vaiTroField, 100, SpringLayout.WEST, panel); // Sắp xếp trường vaiTroField
-        layout.putConstraint(SpringLayout.NORTH, vaiTroField, 110, SpringLayout.NORTH, panel); // Sắp xếp trường vaiTroField
+        layout.putConstraint(SpringLayout.WEST, nhapLaiMatKhauField, 100, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, nhapLaiMatKhauField, 110, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.WEST, dangKyBtn, 200, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, dangKyBtn, 140, SpringLayout.NORTH, panel);
         add(panel);
@@ -67,6 +68,10 @@ public class RegisterView extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         // Xử lý sự kiện khi nút đăng ký được nhấn
+        String tenDangNhap = getTenDangNhap();
+        String matKhau = getMatKhau();
+        String nhapLaiMatKhau = getNhapLaiMatKhau();
+        // Gọi phương thức để xử lý đăng ký với các giá trị thu được
     }
 
     public String getTenDangNhap() {
@@ -77,8 +82,8 @@ public class RegisterView extends JFrame implements ActionListener {
         return matKhauField.getText();
     }
 
-    public String getVaiTro() {
-        return vaiTroField.getText(); // Trả về giá trị của trường vaiTroField
+    public String getNhapLaiMatKhau() {
+        return nhapLaiMatKhauField.getText(); // Trả về giá trị nhập lại mật khẩu
     }
 
     public void register_listener(ActionListener registerListener) {

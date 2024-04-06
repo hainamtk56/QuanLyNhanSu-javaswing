@@ -5,13 +5,16 @@ public class PhongBan {
     private String tenPhongBan;
 
     // Constructors
-    public PhongBan() {}
+    public PhongBan(String tenPhongBan) {
+        this.tenPhongBan = tenPhongBan;
+    }
 
     public PhongBan(int idPhongBan, String tenPhongBan) {
         this.idPhongBan = idPhongBan;
         this.tenPhongBan = tenPhongBan;
     }
 
+    // Getters and Setters
     public int getIdPhongBan() {
         return idPhongBan;
     }

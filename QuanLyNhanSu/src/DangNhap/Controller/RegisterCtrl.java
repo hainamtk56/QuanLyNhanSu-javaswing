@@ -17,20 +17,23 @@ public class RegisterCtrl {
     private RegisterView view;
 
     public RegisterCtrl() {
+        // Kết nối đến cơ sở dữ liệu
         String url = "jdbc:mysql://localhost:3306/quanlynhansu";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             this.conn = DriverManager.getConnection(url, "root", "");
-            System.out.println("connect done");
-        } catch (Exception var3) {
-            var3.printStackTrace();
+            System.out.println("Connect done");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        // Tạo và hiển thị giao diện đăng ký
         this.view = new RegisterView();
-        this.view.register_listener(new Register_action_listener());
+        this.view.register_listener(new RegisterActionListener());
     }
 
+    // Phương thức kiểm tra xem tên đăng nhập đã tồn tại trong cơ sở dữ liệu chưa
     public boolean checkExist(String tenDangNhap) {
         String sql = "SELECT * FROM taikhoannguoidung WHERE tenDangNhap = ?";
 
@@ -39,43 +42,43 @@ public class RegisterCtrl {
             ps.setString(1, tenDangNhap);
             ResultSet rs = ps.executeQuery();
             return rs.next();
-        } catch (SQLException var6) {
-            var6.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
 
-    public boolean register(String tenDangNhap, String matKhau, String vaiTro) {
-        String insertSql = "INSERT INTO taikhoannguoidung (tenDangNhap, matKhau, vaiTro) VALUES (?, ?, ?)";
+    // Phương thức thực hiện đăng ký tài khoản
+    public boolean register(String tenDangNhap, String matKhau) {
+        String insertSql = "INSERT INTO taikhoannguoidung (tenDangNhap, matKhau, vaiTro) VALUES (?, ?, 'Người dùng')";
 
         try {
             PreparedStatement ps = conn.prepareStatement(insertSql);
             ps.setString(1, tenDangNhap);
             ps.setString(2, matKhau);
-            ps.setString(3, vaiTro);
             int rowsInserted = ps.executeUpdate();
             return rowsInserted > 0;
-        } catch (SQLException var7) {
-            var7.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             return false;
         }
     }
 
-    class Register_action_listener implements ActionListener {
-        Register_action_listener() {
-        }
+    // ActionListener cho nút Đăng ký trong giao diện
+    class RegisterActionListener implements ActionListener {
+        RegisterActionListener() {}
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             String tenDangNhap = view.getTenDangNhap();
             String matKhau = view.getMatKhau();
-            String vaiTro = view.getVaiTro();
 
-            RegisterModel model = new RegisterModel(tenDangNhap, matKhau, vaiTro);
+            RegisterModel model = new RegisterModel(tenDangNhap, matKhau);
 
             if (checkExist(model.getTenDangNhap())) {
                 JOptionPane.showMessageDialog(null, "Tài khoản đã tồn tại");
             } else {
-                boolean result = register(model.getTenDangNhap(), model.getMatKhau(), model.getVaiTro());
+                boolean result = register(model.getTenDangNhap(), model.getMatKhau());
                 if (result) {
                     JOptionPane.showMessageDialog(null, "Đăng ký thành công");
                     // Quay lại trang đăng nhập
@@ -87,6 +90,11 @@ public class RegisterCtrl {
             }
         }
     }
+    public void register_listener(ActionListener registerListener) {
+        view.register_listener(registerListener); // Sử dụng nút "Đăng ký" từ giao diện RegisterView
+    }
+
+
 
     public static void main(String[] args) {
         new RegisterCtrl();

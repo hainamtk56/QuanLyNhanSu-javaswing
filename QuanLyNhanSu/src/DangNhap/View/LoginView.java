@@ -2,20 +2,27 @@ package DangNhap.View;
 
 import DangNhap.Controller.LoginCtrl;
 import DangNhap.Model.Login;
+import Menu.*;
+import UserThings.Controller.ThongTinNhanVienController;
+import UserThings.Model.NhanVien;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class LoginView extends JFrame implements ActionListener {
+
+    private Menu menuView;
     private JLabel titleLable;
     private JLabel tenDangNhapLable;
     private JLabel matKhauLable;
     public JTextField tenDangNhapField;
-    public JTextField matKhauField;
+    public JPasswordField matKhauField;
     private JButton dangNhapBtn;
     private JButton dangKyBtn; // Thêm nút đăng ký mới
+    private RegisterView registerView;
 
     public LoginView() {
         initComponents();
@@ -29,13 +36,13 @@ public class LoginView extends JFrame implements ActionListener {
         dangNhapBtn = new JButton("Đăng nhập");
         dangKyBtn = new JButton("Đăng ký"); // Khởi tạo nút đăng ký mới
         tenDangNhapField = new JTextField(30);
-        matKhauField = new JTextField(30);
+        matKhauField = new JPasswordField(30);
         SpringLayout layout = new SpringLayout();
         JPanel panel = new JPanel();
         panel.setSize(500, 200);
         panel.setLayout(layout);
         panel.add(dangNhapBtn);
-        panel.add(dangKyBtn); // Thêm nút đăng ký vào panel
+        panel.add(dangKyBtn);
         panel.add(titleLable);
         panel.add(tenDangNhapLable);
         panel.add(matKhauLable);
@@ -56,7 +63,7 @@ public class LoginView extends JFrame implements ActionListener {
         layout.putConstraint(SpringLayout.WEST, matKhauField, 80, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, matKhauField, 80, SpringLayout.NORTH, panel);
 
-        layout.putConstraint(SpringLayout.WEST, dangNhapBtn, 200, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.WEST, dangNhapBtn, 190, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, dangNhapBtn, 120, SpringLayout.NORTH, panel);
 
         layout.putConstraint(SpringLayout.WEST, dangKyBtn, 290, SpringLayout.WEST, panel);
@@ -73,7 +80,36 @@ public class LoginView extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         // Xử lý sự kiện khi nút đăng nhập hoặc đăng ký được nhấn
+        if (e.getSource() == dangNhapBtn) {
+            // Xử lý đăng nhập ở đây
+            String username = tenDangNhapField.getText();
+            String password = matKhauField.getText();
+
+            // Kiểm tra vai trò
+            LoginCtrl loginCtrl = new LoginCtrl();
+            String role = loginCtrl.getRole(username, password);
+
+            if (role.equals("Quản trị viên")) {
+                MenuController menuController = new MenuController(); // Thay thế ViewAdmin bằng tên thực của view quản trị viên
+                this.dispose(); // Đóng cửa sổ đăng nhập sau khi chuyển đến view quản trị viên
+            } else if (role.equals("Người dùng")) {
+                NhanVien nhanVien = new NhanVien();
+                ThongTinNhanVienController thongTinNhanVienController = new ThongTinNhanVienController(nhanVien); // Thay thế ViewUser bằng tên thực của view người dùng
+                this.dispose(); // Đóng cửa sổ đăng nhập sau khi chuyển đến view người dùng
+            } else {
+                // Hiển thị thông báo lỗi nếu vai trò không hợp lệ
+                JOptionPane.showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu hoặc tài khoản không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (e.getSource() == dangKyBtn) {
+            // Nếu nút "Đăng ký" được nhấn, tạo và hiển thị RegisterView
+            if (registerView == null) {
+                registerView = new RegisterView();
+            }
+            registerView.setVisible(true);
+        }
     }
+
+
 
     public void login_listener(ActionListener log) {
         dangNhapBtn.addActionListener(log);

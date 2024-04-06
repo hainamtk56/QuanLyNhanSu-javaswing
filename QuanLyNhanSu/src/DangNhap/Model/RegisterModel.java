@@ -3,12 +3,10 @@ package DangNhap.Model;
 public class RegisterModel {
     private String tenDangNhap;
     private String matKhau;
-    private String vaiTro;
 
-    public RegisterModel(String tenDangNhap, String matKhau, String vaiTro) {
+    public RegisterModel(String tenDangNhap, String matKhau) {
         this.tenDangNhap = tenDangNhap;
         this.matKhau = matKhau;
-        this.vaiTro = vaiTro;
     }
 
     // Getter methods
@@ -18,9 +16,5 @@ public class RegisterModel {
 
     public String getMatKhau() {
         return matKhau;
-    }
-
-    public String getVaiTro() {
-        return vaiTro;
     }
 }

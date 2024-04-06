@@ -8,19 +8,31 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
 
 public class ChamCongController {
     private final ChamCongView chamCongView = new ChamCongView();
 
     public ChamCongController() {
+        initializeListeners();
         chamCongView.addThemBtnListener(new AddBtnListener());
         chamCongView.addSuaBtnListener(new EditBtnListener());
         chamCongView.addXoaBtnListener(new DeleteBtnListener());
+    }
+
+    //linh
+    private void initializeListeners() {
+        chamCongView.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                chamCongView.dispose();
+            }
+        });
     }
 
     public static DefaultTableModel getAllRecords() {
@@ -169,5 +181,6 @@ public class ChamCongController {
         chamCongView.getChamCongTable().repaint();
         chamCongView.getChamCongTable().validate();
     }
+
 }
 

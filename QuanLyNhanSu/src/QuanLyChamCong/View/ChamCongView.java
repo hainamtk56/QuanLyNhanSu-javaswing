@@ -15,13 +15,14 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import java.sql.Date;
-import java.sql.Time;
 
 public class ChamCongView extends JFrame implements ActionListener {
     // Filter
@@ -45,9 +46,9 @@ public class ChamCongView extends JFrame implements ActionListener {
     }
 
     private void initComponents() {
+
         SpringLayout layout = new SpringLayout();
         setLayout(layout);
-
         // Filter
         JPanel filterPanel = initFilter();
         add(filterPanel);
@@ -77,7 +78,7 @@ public class ChamCongView extends JFrame implements ActionListener {
         setTitle("Quản Lý Chấm Công");
         setSize(1160, 570);
         setLocationRelativeTo(null); //đặt jframe ở giữa màn hình
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 
@@ -434,6 +435,13 @@ public class ChamCongView extends JFrame implements ActionListener {
         ExcelExporter.exportToExcel(filteredModel, "C:\\UTT\\java\\xuatExcel\\ChamCong.xlsx");
     }
 
+    @Override
+    protected void processWindowEvent(WindowEvent e) {
+        if (e.getID() == WindowEvent.WINDOW_CLOSING) {
+            dispose(); // Dispose the view when closed
+        }
+        super.processWindowEvent(e);
+    }
     public JTable getChamCongTable() {
         return chamCongTable;
     }

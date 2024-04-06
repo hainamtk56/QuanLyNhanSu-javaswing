@@ -2,44 +2,42 @@ package QuanLyPhongBan.Controller;
 
 import ConnectionManager.ConnectionManager;
 import QuanLyPhongBan.Model.PhongBan;
+
+import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class PhongBanDAO {
     private static final String INSERT_QUERY = "INSERT INTO phongban (tenPhongBan) VALUES (?)";
     private static final String SELECT_ALL_QUERY = "SELECT * FROM phongban";
     private static final String UPDATE_QUERY = "UPDATE phongban SET tenPhongBan = ? WHERE idPhongBan = ?";
     private static final String DELETE_QUERY = "DELETE FROM phongban WHERE idPhongBan = ?";
-    private static DefaultTableModel tableModel;
 
     public static boolean insert(PhongBan phongBan) {
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_QUERY)) {
 
             preparedStatement.setString(1, phongBan.getTenPhongBan());
+            int rowsInserted = preparedStatement.executeUpdate();
 
-            preparedStatement.executeUpdate();
-            return true;
+            return rowsInserted > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public static DefaultTableModel getAllDepartments() {
+        DefaultTableModel tableModel = new DefaultTableModel();
         try (Connection connection = ConnectionManager.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_QUERY);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-
-            tableModel = new DefaultTableModel() {
-                @Override
-                public boolean isCellEditable(int row, int column) {
-                    return false;
-                }
-            };
 
             int columnCount = resultSet.getMetaData().getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
@@ -53,12 +51,10 @@ public class PhongBanDAO {
                 }
                 tableModel.addRow(row);
             }
-            return tableModel;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new DefaultTableModel();
+        return tableModel;
     }
 
     public static boolean update(PhongBan phongBan) {
@@ -73,8 +69,8 @@ public class PhongBanDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public static boolean delete(int id) {
@@ -90,5 +86,17 @@ public class PhongBanDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static DefaultTableModel sortById() {
+        DefaultTableModel model = getAllDepartments();
+        model.getDataVector().sort(Comparator.comparing(row -> (Integer) row.get(0)));
+        return model;
+    }
+
+    public static DefaultTableModel sortByName() {
+        DefaultTableModel model = getAllDepartments();
+        model.getDataVector().sort(Comparator.comparing(row -> (String) row.get(1)));
+        return model;
     }
 }

@@ -7,8 +7,12 @@ import QuanLyNhanVien.Model.NhanVien;
 import XuatExcel.ExcelExporter;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,12 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.regex.Pattern;
-import javax.swing.table.TableRowSorter;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.JComboBox;
-import javax.swing.RowFilter;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 
 public class NhanVienView extends JFrame implements ActionListener {
@@ -400,7 +398,7 @@ public class NhanVienView extends JFrame implements ActionListener {
         setTitle("Quản Lý Nhân Viên");
         setSize(1300, 593);
         setLocationRelativeTo(null); //đặt jframe ở giữa màn hình
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
     }
 
